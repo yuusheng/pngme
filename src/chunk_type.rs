@@ -3,7 +3,7 @@ use std::{fmt::Display, str::FromStr};
 
 use anyhow::{anyhow, Ok};
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct ChunkType {
     value: [u8; 4],
 }
