@@ -6,9 +6,9 @@ use anyhow::{anyhow, Result};
 
 use crate::chunk_type::ChunkType;
 struct Chunk {
+    len: u32,
     chunk_type: ChunkType,
     data: Vec<u8>,
-    len: u32,
     crc: u32,
 }
 
