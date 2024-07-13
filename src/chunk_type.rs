@@ -18,16 +18,16 @@ impl ChunkType {
     }
 
     fn is_critical(&self) -> bool {
-        is_upper_case_letter(&self.value[0])
+        bit5_is_zero(&self.value[0])
     }
     fn is_public(&self) -> bool {
-        is_upper_case_letter(&self.value[1])
+        bit5_is_zero(&self.value[1])
     }
     fn is_reserved_bit_valid(&self) -> bool {
-        is_upper_case_letter(&self.value[2])
+        bit5_is_zero(&self.value[2])
     }
     fn is_safe_to_copy(&self) -> bool {
-        is_lower_case_letter(&self.value[3])
+        !bit5_is_zero(&self.value[3])
     }
 
     fn is_valid(&self) -> bool {
@@ -71,6 +71,10 @@ fn is_upper_case_letter(byte: &u8) -> bool {
 
 fn is_lower_case_letter(byte: &u8) -> bool {
     (&97..&122).contains(&byte)
+}
+
+fn bit5_is_zero(bit5: &u8) -> bool {
+    (bit5 & 0x20) != 0x20
 }
 
 #[cfg(test)]
