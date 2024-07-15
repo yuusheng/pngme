@@ -1,15 +1,24 @@
-mod args;
 mod chunk;
 mod chunk_type;
 mod commands;
 mod error;
 mod png;
 
-pub type Error = Box<dyn std::error::Error>;
-pub type Result<T> = std::result::Result<T, Error>;
+use anyhow::Result;
+use clap::Parser;
+use commands::{decode, encode, print, remove};
 
 fn main() -> Result<()> {
-    let saner = u32::from_be_bytes([1, 2, 3, 4]);
-    println!("{saner}");
-    todo!()
+    let args = commands::PngArgs::parse();
+    match args.command {
+        commands::PngCommand::Encode(encode_args) => encode(encode_args),
+        commands::PngCommand::Decode(decode_args) => {
+            if let Some(decode_content) = decode(decode_args) {
+                println!("{}", decode_content)
+            }
+        }
+        commands::PngCommand::Remove(remove_args) => remove(remove_args),
+        commands::PngCommand::Print(print_args) => print(print_args),
+    };
+    Ok(())
 }

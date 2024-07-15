@@ -19,7 +19,7 @@ impl Png {
         }
     }
 
-    fn chunks(self) -> Vec<Chunk> {
+    pub fn chunks(self) -> Vec<Chunk> {
         self.chunks
     }
 
