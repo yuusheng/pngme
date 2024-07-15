@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.86"
 crc = "3.2.1"
+thiserror = "1.0.62"

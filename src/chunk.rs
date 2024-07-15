@@ -5,7 +5,8 @@ use std::fmt::Display;
 use anyhow::{anyhow, Result};
 
 use crate::chunk_type::ChunkType;
-struct Chunk {
+#[derive(Debug)]
+pub struct Chunk {
     len: u32,
     chunk_type: ChunkType,
     data: Vec<u8>,
@@ -13,7 +14,7 @@ struct Chunk {
 }
 
 impl Chunk {
-    fn new(chunk_type: ChunkType, data: Vec<u8>) -> Self {
+    pub fn new(chunk_type: ChunkType, data: Vec<u8>) -> Self {
         let len = data.len() as u32;
 
         let bytes: Vec<u8> = chunk_type
@@ -35,7 +36,7 @@ impl Chunk {
         }
     }
 
-    fn length(&self) -> u32 {
+    pub fn length(&self) -> u32 {
         self.len
     }
 
@@ -47,8 +48,19 @@ impl Chunk {
         &self.chunk_type
     }
 
-    fn data_as_string(&self) -> Result<String> {
+    pub fn data_as_string(&self) -> Result<String> {
         Ok(std::str::from_utf8(&self.data)?.to_string())
+    }
+
+    pub fn as_bytes(&self) -> Vec<u8> {
+        self.length()
+            .to_be_bytes()
+            .iter()
+            .chain(self.chunk_type.clone().bytes().iter())
+            .chain(self.data.iter())
+            .chain(self.crc.to_be_bytes().iter())
+            .copied()
+            .collect()
     }
 }
 
