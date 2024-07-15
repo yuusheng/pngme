@@ -1,8 +1,8 @@
 use std::fmt::Display;
 
-use anyhow::{anyhow, Result};
+use anyhow::Result;
 
-use crate::chunk_type::ChunkType;
+use crate::{chunk_type::ChunkType, error::PngError};
 #[derive(Debug)]
 pub struct Chunk {
     len: u32,
@@ -63,16 +63,16 @@ impl Chunk {
 }
 
 impl TryFrom<&[u8]> for Chunk {
-    type Error = anyhow::Error;
+    type Error = PngError;
 
     fn try_from(value: &[u8]) -> Result<Self, Self::Error> {
-        let chunk_type: [u8; 4] = value[4..8].try_into()?;
+        let chunk_type: [u8; 4] = value[4..8].try_into().unwrap();
         let chunk_type = ChunkType::try_from(chunk_type)?;
         let data = value[8..value.len() - 4].to_vec();
-        let expect_crc: u32 = u32::from_be_bytes(value[value.len() - 4..].try_into()?);
+        let expect_crc: u32 = u32::from_be_bytes(value[value.len() - 4..].try_into().unwrap());
         let new_chunk = Self::new(chunk_type, data);
         if new_chunk.crc() != expect_crc {
-            return Err(anyhow!(format!("Crc is not correct")));
+            return Err(PngError::CRCError);
         }
 
         Ok(new_chunk)

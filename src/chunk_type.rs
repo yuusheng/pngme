@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 use std::{fmt::Display, str::FromStr};
 
-use anyhow::{anyhow, Ok};
+use crate::error::PngError;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct ChunkType {
@@ -36,7 +36,7 @@ impl ChunkType {
 }
 
 impl TryFrom<[u8; 4]> for ChunkType {
-    type Error = anyhow::Error;
+    type Error = PngError;
 
     fn try_from(value: [u8; 4]) -> Result<Self, Self::Error> {
         Ok(Self { value })
@@ -44,13 +44,13 @@ impl TryFrom<[u8; 4]> for ChunkType {
 }
 
 impl FromStr for ChunkType {
-    type Err = anyhow::Error;
+    type Err = PngError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let arr = s.as_bytes();
         for byte in arr.iter() {
             if !is_lower_case_letter(byte) && !is_upper_case_letter(byte) {
-                return Err(anyhow!(format!("Byte is not valid")));
+                return Err(PngError::ChunkTypeError);
             }
         }
 
