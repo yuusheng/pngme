@@ -7,6 +7,7 @@ use std::{
 };
 
 #[derive(Parser, Debug)]
+#[clap(author, version, about)]
 pub struct PngArgs {
     #[command(subcommand)]
     pub command: PngCommand,
@@ -14,9 +15,16 @@ pub struct PngArgs {
 
 #[derive(Subcommand, Debug)]
 pub enum PngCommand {
+    /// Encode your png files with some secret content
     Encode(EncodeArgs),
+
+    /// Decode your secret content with your chunk type
     Decode(DecodeArgs),
+
+    /// remove some secret content with chunk type
     Remove(RemoveArgs),
+
+    /// Print all secret content
     Print(PrintArgs),
 }
 

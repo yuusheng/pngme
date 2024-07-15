@@ -1,9 +1,7 @@
-#![allow(dead_code, unused_variables, unused_imports)]
+#![allow(dead_code)]
 use std::fmt::{Display, Formatter};
 
-use anyhow::Result;
-
-use crate::{chunk::Chunk, chunk_type::ChunkType, error::PngError};
+use crate::{chunk::Chunk, error::PngError};
 #[derive(Debug)]
 pub struct Png {
     signature: [u8; 8],
@@ -105,8 +103,8 @@ mod tests {
     use super::*;
     use crate::chunk::Chunk;
     use crate::chunk_type::ChunkType;
+    use anyhow::Result;
     use std::convert::TryFrom;
-    use std::str::FromStr;
 
     fn testing_chunks() -> Vec<Chunk> {
         vec![
