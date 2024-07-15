@@ -1,8 +1,7 @@
 use crate::{chunk::Chunk, chunk_type::ChunkType, png::Png};
 use clap::{Args, Parser, Subcommand};
 use std::{
-    fs::{self, File},
-    io::Read,
+    fs::{self},
     path::PathBuf,
 };
 
@@ -54,11 +53,7 @@ pub struct PrintArgs {
 }
 
 pub fn read_file(path: &PathBuf) -> Vec<u8> {
-    let mut f = File::open(&path).expect("File not found");
-    let metadata = fs::metadata(&path).expect("Unable to read metadata");
-    let mut buffer = vec![0; metadata.len() as usize];
-    f.read(&mut buffer).expect("Buffer overflow");
-    buffer
+    fs::read(path.to_str().unwrap()).expect("File not found")
 }
 
 pub fn encode(args: EncodeArgs) {
